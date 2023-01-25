@@ -3,6 +3,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
 
+ //Fix bugs
 public class JTargetPractise extends JFrame implements MouseListener
 {
      private JPanel[] arrayPanel = new JPanel[100];
