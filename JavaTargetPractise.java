@@ -3,7 +3,8 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
 
-public class JTargetPractise extends JFrame implements MouseListener
+ //Fix bugs
+public class JavaTargetPractise extends JFrame implements MouseListener
 {
      private JPanel[] arrayPanel = new JPanel[100];
      private final int COL = 10;
@@ -13,8 +14,9 @@ public class JTargetPractise extends JFrame implements MouseListener
      private final String hit = "HIT";
      private JLabel[] label = new JLabel[5];
      private Container con = getContentPane();
+     private int labelNumber;
 
-     public JTargetPractise()
+     public JavaTargetPractise()
      {
         setTitle("JTargetPractise");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -30,6 +32,7 @@ public void addTragetPanels(JPanel[] array, JLabel[] label, String str)
 {
     int i;
 
+    //Add panels to main frame
     for(i = 0; i < array.length; ++i)
     {
         array[i] = new JPanel();
@@ -37,6 +40,7 @@ public void addTragetPanels(JPanel[] array, JLabel[] label, String str)
         array[i].addMouseListener(this);
     }
 
+    //Initialize 5 JLabels with a string
     for(i = 0; i < label.length; ++i)
     {
         label[i] = new JLabel(str);
@@ -54,10 +58,12 @@ public void displayTarget(JPanel[] array, JLabel[] label)
       int count = 0;
       ArrayList<Integer> list = new ArrayList<>(5);
 
+      //Randomly select five numbers between 0 to 99
       for(i = 0; i < numTargets; ++i)
       {
          j = (int)(Math.random()*100);
 
+         //Ensure a random number is not repeated
          //Ensure a random panel is not choosen more than once
          for(int k = 0; k < list.size(); ++k)
          {
@@ -76,6 +82,7 @@ public void displayTarget(JPanel[] array, JLabel[] label)
          }
          else
          {
+            list.remove(i);
             i = i;
          }
       }
@@ -83,8 +90,6 @@ public void displayTarget(JPanel[] array, JLabel[] label)
       for(i = 0; i < list.size(); ++i)
       {
           array[list.get(i)].add(label[i]);
-          invalidate();
-          repaint();
       }
 }
 
@@ -98,7 +103,7 @@ public void mouseClicked(MouseEvent e)
 
     if(whichButt == MouseEvent.BUTTON1)
     {
-        for(int i = 0; i < 5; ++i)
+        for(int i = 0; i < arrayPanel.length; ++i)
         {
             if(selectedPanel == arrayPanel[i])
             {
@@ -107,16 +112,16 @@ public void mouseClicked(MouseEvent e)
             }
         }
 
+        //System.out.println(labelNumber);
         try
         {
-           Object selectLabel = selectedPanel.getComponent(index);
-           JLabel hitLabel = (JLabel) selectLabel;
+           Object[] selectedLabel = selectedPanel.getComponents();
+           JLabel hitLabel = (JLabel) selectedLabel[0];
            hitLabel.setText(hit);
         }
         catch(ArrayIndexOutOfBoundsException g)
         {
           JOptionPane.showMessageDialog(null, g);   
-          displayTarget(arrayPanel, label);
         }
     }
 }
@@ -143,7 +148,7 @@ public void mouseReleased(MouseEvent e)
 
 public static void main(String[] args)
 {
-    JTargetPractise aFrame = new JTargetPractise();
+    JavaTargetPractise aFrame = new JavaTargetPractise();
     aFrame.setBounds(300,300,400,400);
     aFrame.setVisible(true);
 }
