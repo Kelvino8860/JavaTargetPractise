@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.time.LocalDateTime;
+
 import javax.swing.*;
 import java.util.*;
 
@@ -14,7 +16,11 @@ public class JavaTargetPractise extends JFrame implements MouseListener
      private final String hit = "HIT";
      private JLabel[] label = new JLabel[5];
      private Container con = getContentPane();
-     private int labelNumber;
+     private int count = 0;
+     private LocalDateTime time = LocalDateTime.now();
+     private int startTime;
+     private int stopTime;
+
 
      public JavaTargetPractise()
      {
@@ -23,6 +29,8 @@ public class JavaTargetPractise extends JFrame implements MouseListener
         con.add(mainPanel);
         addTragetPanels(arrayPanel, label, str);
         displayTarget(arrayPanel,label);
+
+        startTime = time.getSecond();
      }
 
 /*The method creates 100 JPanels and adds them in the
@@ -90,6 +98,9 @@ public void displayTarget(JPanel[] array, JLabel[] label)
       for(i = 0; i < list.size(); ++i)
       {
           array[list.get(i)].add(label[i]);
+          label[i].setText("X");
+          invalidate();
+          repaint();
       }
 }
 
@@ -118,12 +129,25 @@ public void mouseClicked(MouseEvent e)
            Object[] selectedLabel = selectedPanel.getComponents();
            JLabel hitLabel = (JLabel) selectedLabel[0];
            hitLabel.setText(hit);
+           ++count;
         }
         catch(ArrayIndexOutOfBoundsException g)
         {
-          JOptionPane.showMessageDialog(null, g);   
-        }
+          JOptionPane.showMessageDialog(null, "Wrong Move \nGAME RESTARTS");
+         }
     }
+ 
+     LocalDateTime time2 = LocalDateTime.now();
+     stopTime = time2.getSecond();
+
+    if((stopTime - startTime) >= 10)
+    {
+        displayHits(count);
+    }
+    else
+    if(count == 5)
+    displayTarget(arrayPanel, label);
+
 }
 @Override
 public void mouseEntered(MouseEvent e)
@@ -146,6 +170,11 @@ public void mouseReleased(MouseEvent e)
 
 }
 
+public void displayHits(int coun)
+{
+    JOptionPane.showMessageDialog(null,"Number of Hits: " + coun);
+    System.exit(ABORT);
+}
 public static void main(String[] args)
 {
     JavaTargetPractise aFrame = new JavaTargetPractise();
